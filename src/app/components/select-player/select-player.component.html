@@ -1,0 +1,12 @@
+<div class="select" [ngClass]="{'goal-kipper':goalKipperClass }">
+    <ion-icon name="shirt"></ion-icon>
+    <mat-form-field>
+        <mat-select [(ngModel)]="selectedPlayer"   (ngModelChange)="onSelected()" >
+            <mat-option [value]="emptyPlayer"
+                        [value]="emptyPlayer.id === selectedPlayer.id ? selectedPlayer : emptyPlayer"
+            ></mat-option>
+            <mat-option *ngFor="let player of players"
+                        [value]="player">{{player.lastName}}</mat-option>
+        </mat-select>
+    </mat-form-field>
+</div>
