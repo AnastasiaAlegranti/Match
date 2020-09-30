@@ -1,0 +1,24 @@
+<ion-grid>
+    <ion-row>
+        <ion-col>Min</ion-col>
+        <ion-col>Player Out</ion-col>
+        <ion-col>Player In</ion-col>
+    </ion-row>
+    <ion-row *ngFor="let sub of substitutionsList$, let i=index">
+        <ion-col [ngClass]="{'required': (sub.subMin==='undefined'|| sub.subMin===null) && isSubmitted$}">
+            <input type="number" min="0" max="90" step="1" [(ngModel)]="sub.subMin"(blur)="calculatePlayersLists(i)"/>
+        </ion-col>
+        <ion-col [ngClass]="{'required': sub.playerOut.id===0  && isSubmitted$}">
+            <app-select-substitution-player [availablePlayers]="sub.lineupPlayers" [selectedPlayer]="sub.playerOut" [isDisable]="!sub.enableSelect" (selectEvent)="initPlayerToSubstitution($event,i,1)"></app-select-substitution-player>
+        </ion-col>
+        <ion-col [ngClass]="{'required': sub.playerIn.id===0 && isSubmitted$}">
+            <app-select-substitution-player [availablePlayers]="sub.benchPlayers" [selectedPlayer]="sub.playerOut" [isDisable]="!sub.enableSelect"(selectEvent)="initPlayerToSubstitution($event,i,2)"></app-select-substitution-player>
+        </ion-col>
+    </ion-row>
+
+    <ion-row justify-content-center [ngClass]="{'required': substitutionsList$.length===0 && isSubmitted$}">
+        <ion-col (click)="addSubstitution()">
+            <ion-icon name="add-circle"></ion-icon>
+        </ion-col>
+    </ion-row>
+</ion-grid>

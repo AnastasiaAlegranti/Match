@@ -1,6 +1,7 @@
 import {Component, Input, OnInit} from '@angular/core';
-import {Player} from '../../interfaces/matchDataJson';
 import {SharedService} from '../../services/shared.service';
+import {StoreService} from '../../services/store.service';
+import {Player} from '../../models/Player';
 
 @Component({
     selector: 'app-select',
@@ -10,40 +11,51 @@ import {SharedService} from '../../services/shared.service';
 export class SelectPlayerComponent implements OnInit {
     @Input() selectedPlayer: Player;
     @Input() goalKipperClass: boolean;
-    public emptyPlayer = new Player();
+    @Input() isPlayerInReplaceMode: boolean;
     public tempPlayer: Player;
-    @Input() players: Player[]; // subscribe
-    @Input() selectedPlayers: Player[]; // subscribe
-    @Input() unselectedPlayers: Player[]; // subscribe
+    public emptyPlayer: Player;
+    public players$: Player[];
+    public benchPlayers$: Player[];
+    public lineupPlayers$: Player[];
+    public isSubmitted$: boolean;
 
-    public constructor(private sharedService: SharedService) {
+    public constructor(private sharedService: SharedService, private storeService: StoreService) {
+        this.subscribeData();
     }
 
     ngOnInit() {
-        this.tempPlayer = this.selectedPlayer;
-        console.log('tempPlayer', this.tempPlayer);
-        console.log('selectedPlayer', this.selectedPlayer);
+        this.tempPlayer = this.selectedPlayer;//For resetting player in lineup if selected one is already exist in lineup and must.
+        this.emptyPlayer = new Player();
     }
 
+    subscribeData() {
+        this.storeService.players$.subscribe(players =>
+            this.players$ = players);
+        this.storeService.benchPlayers$.subscribe(unSelectedPlayers => {
+            this.benchPlayers$ = unSelectedPlayers;
+        });
+        this.storeService.lineupPlayers$.subscribe(selectedPlayers => {
+            this.lineupPlayers$ = selectedPlayers;
+        });
+        this.storeService.isSubmit$.subscribe(bool => this.isSubmitted$ = bool);
+    }
 
-    public async onSelected() {
-        // console.log('onSelected', this.tempPlayer, this.selectedPlayer);
-        if (this.selectedPlayers.some(el => el === this.selectedPlayer)) {
+    async onSelected() {
+        if (this.lineupPlayers$.some(el => el === this.selectedPlayer)) {//If selected player already exist in the lineup
             await this.sharedService.showAlert('Can not choose same player twice. ', true, false);
             this.selectedPlayer = this.tempPlayer;
             return;
         }
-        if (this.selectedPlayer.id > 0) {
-            this.selectedPlayers.push(this.selectedPlayer);
-            this.unselectedPlayers = this.unselectedPlayers.filter(el => el.id !== this.selectedPlayer.id);
-            if (this.tempPlayer.id > 0) {
-                this.unselectedPlayers.push(this.tempPlayer);
-                this.selectedPlayers = this.selectedPlayers.filter(el => el.id !== this.tempPlayer.id);
-            }
+        if (this.selectedPlayer.id > 0) {//If player selected=>push to lineup and remove from the bench
+            this.benchPlayers$ = this.benchPlayers$.filter(el => el.id !== this.selectedPlayer.id);
+            this.lineupPlayers$.push(this.selectedPlayer);
         }
-        console.log('selected', this.selectedPlayers);
-        console.log('unselected', this.unselectedPlayers);
-        this.tempPlayer = this.selectedPlayer;
+        if (this.tempPlayer.id > 0) {//If switch players=> push previous player to bench and remove from lineup
+            this.benchPlayers$.push(this.tempPlayer);
+            this.lineupPlayers$ = this.lineupPlayers$.filter(el => el.id !== this.tempPlayer.id);
+        }
+        this.storeService.updateBenchPlayers(this.benchPlayers$);
+        this.storeService.updateLineupPlayers(this.lineupPlayers$);
+        this.tempPlayer = this.selectedPlayer;//For future check when player will be selected.
     }
-
 }

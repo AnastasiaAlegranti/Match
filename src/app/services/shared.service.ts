@@ -15,7 +15,6 @@ export class SharedService {
       buttons.push(
           {
             text: 'Ok',
-            // cssClass: 'alertButton',
             handler: () => {
               swDismiss = true;
             }
@@ -24,7 +23,6 @@ export class SharedService {
     if (showCancelBtn) {
       buttons.push({
         text: 'Cancel',
-        // cssClass: 'alertButton',
         handler: () => {
           swDismiss = false;
         }

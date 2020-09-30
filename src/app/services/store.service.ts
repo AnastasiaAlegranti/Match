@@ -1,43 +1,45 @@
 import {Injectable} from '@angular/core';
-import {BehaviorSubject, Observable, of} from 'rxjs';
-import {Player} from '../interfaces/matchDataJson';
+import {BehaviorSubject, Observable} from 'rxjs';
 import {MatchService} from './match.service';
+import {MatchDetailsModel} from '../models/MatchDetailsModel';
+import {Player} from '../models/Player';
+import {Substitution} from '../models/Substitution';
+import {Score} from '../models/Score';
 
 @Injectable({
     providedIn: 'root'
 })
-export class PlayersStateService {
-    // private playersSource: BehaviorSubject<Player[]> = new BehaviorSubject([]);
-    // public players$: Observable<Player[]> = this.playersSource.asObservable();
-
-    // private lineupPlayersSource: BehaviorSubject<Player[]> = new BehaviorSubject([]);
-    // public selectedPlayers: Observable<Player[]> = this.lineupPlayersSource.asObservable();
-    //
-    // private benchPlayersSource: BehaviorSubject<Player[]> = new BehaviorSubject([]);
-    // public unSelectedPlayers: Observable<Player[]> = this.lineupPlayersSource.asObservable();
-
-
+export class StoreService {
+    private matchDetailsSource: BehaviorSubject<MatchDetailsModel>;
+    public matchDetails$: Observable<MatchDetailsModel>;
+    private formationSource: BehaviorSubject<string>;
+    public formation$: Observable<string>;
     private playersSource: BehaviorSubject<Player[]>;
     public players$: Observable<Player[]>;
-
     private lineupPlayersSource: BehaviorSubject<Player[]>;
     public lineupPlayers$: Observable<Player[]>;
-
     private benchPlayersSource: BehaviorSubject<Player[]>;
     public benchPlayers$: Observable<Player[]>;
-
+    private isSubmitSource: BehaviorSubject<boolean>;
+    public isSubmit$: Observable<boolean>;
+    private substitutionsSource: BehaviorSubject<Substitution[]>;
+    public substitutions$: Observable<Substitution[]>;
 
     constructor(private matchService: MatchService) {
-        this.initPlayerList();
+        this.initAllData();
     }
 
-    async initPlayerList() {
+    async initAllData() {
+        this.matchDetailsSource = new BehaviorSubject<MatchDetailsModel>(new MatchDetailsModel('', '', new Score(), ''));
+        this.matchDetails$ = this.matchDetailsSource.asObservable();
 
-        console.log('constructor');
+        this.isSubmitSource = new BehaviorSubject(false);
+        this.isSubmit$ = this.isSubmitSource.asObservable();
 
+        this.formationSource = new BehaviorSubject('4-4-2');
+        this.formation$ = this.formationSource.asObservable();
 
         let players = this.matchService.getPlayersList();
-        console.log('initPlayerList', players);
 
         this.playersSource = new BehaviorSubject(players);
         this.players$ = this.playersSource.asObservable();
@@ -48,6 +50,8 @@ export class PlayersStateService {
         this.lineupPlayersSource = new BehaviorSubject([]);
         this.lineupPlayers$ = this.lineupPlayersSource.asObservable();
 
+        this.substitutionsSource = new BehaviorSubject<Substitution[]>([]);
+        this.substitutions$ = this.substitutionsSource.asObservable();
 
         this.updatePlayers(players);
         this.updateBenchPlayers(players);
@@ -55,34 +59,29 @@ export class PlayersStateService {
 
     updatePlayers(players: Player[]) {
         this.playersSource.next(players);
-        console.log('updatePlayers', this.playersSource.getValue());
-    }
-
-    getPlayersValue(): Player[] {
-        console.log('getPlayersValue', this.playersSource.getValue());
-        return this.playersSource.getValue();
     }
 
     updateLineupPlayers(players: Player[]) {
         this.lineupPlayersSource.next(players);
-        console.log('updateSelectedPlayers', this.lineupPlayersSource.getValue());
     }
 
-    getSelectedPlayersValue(): Player[] {
-        console.log('getSelectedPlayersValue', this.lineupPlayersSource.getValue());
-        return this.lineupPlayersSource.getValue();
+    updateIsSubmitted(bool: boolean) {
+        this.isSubmitSource.next(bool);
+    }
+
+    updateMatchDetails(matchDetails: MatchDetailsModel) {
+        this.matchDetailsSource.next(matchDetails);
+    }
+
+    updateFormation(selectedFormation: string) {
+        this.formationSource.next(selectedFormation);
+    }
+
+    updateSubstitutions(substitutions: Substitution[]) {
+        this.substitutionsSource.next(substitutions);
     }
 
     updateBenchPlayers(players: Player[]) {
         this.benchPlayersSource.next(players);
-        console.log('in updateUnSelectedPlayers', players, this.benchPlayersSource.getValue());
-        // this.unSelectedPlayers$.subscribe(el => console.log(' updateUnSelectedPlayers unSelectedPlayers', el));
-
     }
-
-    getUnSelectedPlayersValue(): Player[] {
-        console.log('getUnSelectedPlayersValue', this.benchPlayersSource.getValue());
-        return this.benchPlayersSource.getValue();
-    }
-
 }

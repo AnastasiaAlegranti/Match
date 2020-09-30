@@ -1,0 +1,66 @@
+<ion-grid>
+    <ion-row>
+        <ion-col><!--Lineup-->
+            <div class="football-field">
+                <ion-row justify-content-center [ngStyle]="{'padding-bottom':this.selectedFormationType.id==1?'25px':'0px'}">
+                    <ion-col>
+                        <div class="top-gate"></div>
+                    </ion-col>
+                </ion-row>
+                <ion-row justify-content-center [ngStyle]="{'padding-bottom':this.selectedFormationType.id==1?'37px':'0px'}">
+                    <ion-col *ngFor="let el of rows?.attackers; let i= index" (click)="switchPlayers(rows.attackers,i)" >
+                        <app-select [selectedPlayer]="rows.attackers[i]" [isPlayerInReplaceMode]="!(!playerInReplaceMode)"></app-select>
+                    </ion-col>
+                </ion-row>
+                <ion-row justify-content-center *ngIf="rows.attackersSecondRow.length>0" >
+                    <ion-col *ngFor="let el of rows.attackersSecondRow; let i= index; let first=first" (click)="switchPlayers(rows.attackersSecondRow,i)" [ngStyle]="{'text-align':first && selectedFormationType.id==2?'left':'-webkit-right'}">
+                        <app-select [selectedPlayer]="rows.attackersSecondRow[i]" [isPlayerInReplaceMode]="!(!playerInReplaceMode)"></app-select>
+                    </ion-col>
+                </ion-row>
+                <ion-row justify-content-center [ngStyle]="{'padding-bottom':this.selectedFormationType.id==1?'37px':'0px'}">
+                    <ion-col *ngFor="let el of rows?.midFielders;let i= index" (click)="switchPlayers(rows.midFielders,i)">
+                        <app-select [selectedPlayer]="rows.midFielders[i]" [isPlayerInReplaceMode]="!(!playerInReplaceMode)"></app-select>
+                    </ion-col>
+                </ion-row>
+                <ion-row justify-content-center *ngIf="rows.midFieldersSecondRow.length>0" >
+                    <ion-col *ngFor="let el of rows?.midFieldersSecondRow;let i= index" (click)="switchPlayers(rows.midFieldersSecondRow,i)" >
+                        <app-select [selectedPlayer]="rows.midFieldersSecondRow[i]" [isPlayerInReplaceMode]="!(!playerInReplaceMode)"></app-select>
+                    </ion-col>
+                </ion-row>
+                <ion-row justify-content-center [ngStyle]="{'padding-bottom':this.selectedFormationType.id==1?'37px':'0px'}">
+                    <ion-col *ngFor="let defender of rows?.defenders;let i= index;let first=first" (click)="switchPlayers(rows.defenders,i)" [ngStyle]="{'text-align':first && selectedFormationType.id==3?'left':'-webkit-right'}">
+                        <app-select [selectedPlayer]="rows.defenders[i]" [isPlayerInReplaceMode]="!(!playerInReplaceMode)"></app-select>
+                    </ion-col>
+                </ion-row>
+                <ion-row justify-content-center *ngIf="rows.defendersSecondRow.length>0" >
+                    <ion-col *ngFor="let defender of rows?.defendersSecondRow;let i= index"(click)="switchPlayers(rows.defendersSecondRow,i)">
+                        <app-select [selectedPlayer]="rows.defendersSecondRow[i]" [isPlayerInReplaceMode]="!(!playerInReplaceMode)"></app-select>
+                    </ion-col>
+                </ion-row>
+
+                <ion-row justify-content-center [ngStyle]="{'padding-bottom':this.selectedFormationType.id==1?'33px':'0px'}">
+                    <ion-col >
+                        <div class="bottom-gate" (click)="switchPlayers(rows.goalKippers,0)" [ngStyle]="{'margin-bottom':this.selectedFormationType.id==1?'-37px':'-3px'}">
+                            <app-select [selectedPlayer]="rows?.goalKippers[0]" [goalKipperClass]="true" [isPlayerInReplaceMode]="!(!playerInReplaceMode)"></app-select>
+                        </div>
+                    </ion-col>
+                </ion-row>
+            </div>
+        </ion-col>
+
+        <ion-col style="margin-top: 0px;padding-left: 10px; padding-right: 10px;"> <!--Bench-->
+            <div class="select">
+                <ion-icon name="grid" style="display: inline-block"></ion-icon>
+                <mat-form-field style="display: block;width: auto;">
+                    <mat-select [(ngModel)]="selectedFormationType" (ngModelChange)="initRows()">
+                        <mat-option *ngFor="let formation of formationTypesList"[value]="formation.id === selectedFormationType.id ? selectedFormationType : formation">{{formation.name}}</mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </div>
+            <div class="bench">
+                <button (click)="enterReplacePlayerMode(player)" *ngFor="let player of benchPlayers$; let i=index" [ngClass]="{'replaceMode': player==playerInReplaceMode}">{{player.lastName}}</button>
+            </div>
+        </ion-col>
+    </ion-row>
+</ion-grid>
+

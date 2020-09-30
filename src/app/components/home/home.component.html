@@ -1,0 +1,39 @@
+
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Match Dashboard</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="onSubmit()">
+        <ion-icon name="checkmark-circle-outline" class="submit-icon"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+  <ion-segment [(ngModel)]="viewNumber" color="primary">
+    <ion-segment-button value="1" checked>
+      <ion-label>Details </ion-label>
+    </ion-segment-button>
+    <ion-segment-button value="2">
+      <ion-label>Lineup</ion-label>
+    </ion-segment-button>
+
+    <ion-segment-button value="3">
+      <ion-label>Substitutions</ion-label>
+    </ion-segment-button>
+  </ion-segment>
+</ion-header>
+<ion-content>
+<ion-grid>
+  <ion-row justify-content-center >
+    <ion-col size-xs="auto" [hidden]="platformWidth<550 && viewNumber!=1">
+      <app-match-details style="width: 350px"></app-match-details>
+    </ion-col>
+    <ion-col size-xs="auto"  [hidden]="platformWidth<550 && viewNumber!=2"  style="padding: 0px">
+      <app-lineup></app-lineup>
+    </ion-col>
+    <ion-col  size-xs="auto" [hidden]="platformWidth<550 && viewNumber!=3" >
+      <app-substitutions style="width: 350px"></app-substitutions>
+      <ion-button (click)="onSubmit()" class="submit-button">Submit</ion-button>
+    </ion-col>
+  </ion-row>
+</ion-grid>
+</ion-content>

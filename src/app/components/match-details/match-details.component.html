@@ -1,0 +1,29 @@
+<mat-toolbar>
+    <ion-thumbnail slot="start">
+        <img [src]="teamData.logoImage">
+    </ion-thumbnail>
+    <span style="padding-left: 10px">{{teamData.teamName}}</span>
+</mat-toolbar>
+<h2>VS</h2>
+<mat-toolbar>
+    <ion-thumbnail slot="start">
+        <img src="{{rivalImageSrc}}" (click)="imageInput.click()" id="imgShow"
+             *ngIf="rivalImageSrc"/>
+        <ion-icon name="image" (click)="imageInput.click()" *ngIf="!rivalImageSrc " class="img-icon"></ion-icon>
+    </ion-thumbnail>
+    <ion-input placeholder="Team rival name" [(ngModel)]="matchDetails$.rivelName" type="text" [ngClass]="{'required':(matchDetails$.rivelName==='' || !matchDetails$.rivelName) && isSubmitted$}" (ionBlur)="updateMatchDetails()" maxlength="30"></ion-input>
+    <input type="file" style="display: none" (change)="onImageSelected($event)" #imageInput>
+</mat-toolbar>
+<h2>SCORE</h2>
+<mat-toolbar>
+    <ion-input placeholder="home" [(ngModel)]="matchDetails$.score.myTeam" type="number" class="score" min="0" max="20" step="1" maxlength="2" (ionChange)="updateMatchDetails()" [ngClass]="{'required':matchDetails$.score.myTeam===null && isSubmitted$}"></ion-input>
+    :
+    <ion-input placeholder="away" [(ngModel)]="matchDetails$.score.rival" type="number" class="score" min="0" max="20" step="1" maxlength="2" (ionChange)="updateMatchDetails()" [ngClass]="{'required':matchDetails$.score.rival===null && isSubmitted$}" ></ion-input>
+</mat-toolbar>
+
+<div class="radio-group" [ngClass]="{'required': !matchDetails$.matchLocation && isSubmitted$}" >
+    <mat-radio-group aria-label="Select an option" [(ngModel)]="matchDetails$.matchLocation" name="location" (change)="updateMatchDetails()">
+        <mat-radio-button value="home" class="radio">Home</mat-radio-button>
+        <mat-radio-button value="away" class="radio">Away</mat-radio-button>
+    </mat-radio-group>
+</div>

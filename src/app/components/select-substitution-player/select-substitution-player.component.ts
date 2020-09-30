@@ -1,16 +1,16 @@
-import {Component, Input, OnInit, EventEmitter, Output} from '@angular/core';
-import {Player} from '../../interfaces/matchDataJson';
+import {Component, Input, EventEmitter, Output} from '@angular/core';
+import {Player} from '../../models/Player';
 
 @Component({
-    selector: 'app-select-substiution-player',
-    templateUrl: './select-substiution-player.component.html',
-    styleUrls: ['./select-substiution-player.component.scss'],
+    selector: 'app-select-substitution-player',
+    templateUrl: './select-substitution-player.component.html',
+    styleUrls: ['./select-substitution-player.component.scss'],
 })
-export class SelectSubstiutionPlayerComponent {
+export class SelectSubstitutionPlayerComponent {
     @Input() isDisable: boolean;
     @Input() availablePlayers: Player[];
-    @Output() selectEvent = new EventEmitter<Player>();
     @Input() selectedPlayer: Player;
+    @Output() selectEvent = new EventEmitter<Player>();
 
     onSelect() {
         this.selectEvent.emit(this.selectedPlayer);

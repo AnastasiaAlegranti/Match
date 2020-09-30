@@ -1,6 +1,5 @@
 <div class="select">
     <mat-form-field >
-
         <mat-select [(ngModel)]="selectedPlayer" (ngModelChange)="onSelect()"  [disabled]="isDisable">
             <mat-option [value]="selectedPlayer"></mat-option>
             <mat-option *ngFor="let player of availablePlayers" [value]="player">{{player.lastName}}</mat-option>

@@ -24,3 +24,60 @@
 @import "~@ionic/angular/css/text-alignment.css";
 @import "~@ionic/angular/css/text-transformation.css";
 @import "~@ionic/angular/css/flex-utils.css";
+
+.mat-form-field-appearance-legacy .mat-form-field-infix {
+  margin: 0px !important;
+  padding: 0px !important;
+  border-top: 0px;
+}
+
+.mat-form-field-appearance-fill .mat-form-field-flex {
+  background: inherit;
+}
+
+.mat-form-field-underline {
+  display: none !important;
+}
+
+.mat-standard-chip {
+  min-height: 20px;
+  font-size: 12px;
+}
+
+.inner-scroll scroll-y {
+  background: pink;
+}
+
+.mat-radio-button.mat-accent.mat-radio-checked .mat-radio-outer-circle {
+  border-color: #a704a7;
+}
+
+.mat-radio-button.mat-accent .mat-radio-inner-circle {
+  background-color: #a704a7;
+}
+
+.mat-select-disabled .mat-select-value {
+  color: white;
+}
+
+.required{
+  border-bottom: 3px solid #a704a7!important
+}
+
+.requiredIcon{
+  color: #a704a7!important;
+}
+
+.alert-button-group{
+  padding: 0px !important;
+}
+
+.alert-message {
+  padding-top: 16px !important;
+  padding-bottom: 0px !important;
+  color:gray!important;
+}
+
+.alert-head {
+  display: none !important;
+}
