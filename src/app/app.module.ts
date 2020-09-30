@@ -17,6 +17,8 @@ import {SelectPlayerComponent} from './components/select-player/select-player.co
 import {MatToolbarModule} from '@angular/material/toolbar';
 import {MatRadioModule} from '@angular/material/radio';
 import {SelectSubstitutionPlayerComponent} from './components/select-substitution-player/select-substitution-player.component';
+import { ServiceWorkerModule } from '@angular/service-worker';
+import { environment } from '../environments/environment';
 
 @NgModule({
     declarations: [
@@ -30,7 +32,7 @@ import {SelectSubstitutionPlayerComponent} from './components/select-substitutio
     ],
     entryComponents: [],
     imports: [
-        BrowserModule, IonicModule.forRoot(), AppRoutingModule, BrowserAnimationsModule, MatSelectModule, FormsModule, MatToolbarModule, MatRadioModule],
+        BrowserModule, IonicModule.forRoot(), AppRoutingModule, BrowserAnimationsModule, MatSelectModule, FormsModule, MatToolbarModule, MatRadioModule, ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production })],
     providers: [
         StatusBar,
         SplashScreen,

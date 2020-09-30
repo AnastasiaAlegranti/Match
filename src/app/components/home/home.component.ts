@@ -122,6 +122,7 @@ export class HomeComponent {
             this.viewNumber = 2;//If mobile => show lineup view
             return false;
         }
+        return true;
     }
 
     resetAllData() {
