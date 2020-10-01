@@ -67,25 +67,29 @@ ion-row {
 }
 
 .bench {
-  width: 160px;
+  width: 190px;
 }
 
-button {
+ion-button {
   margin-right: 5px;
-  width: 72px;
+  width: 87px;
+  height: 30px;
+  --background: white;
+  --color: cadetblue;
 }
 
-button:active {
+ion-button:active {
   outline: none;
   border: none;
 }
 
-button:focus {
+ion-button:focus {
   outline: 0;
 }
 
 .replaceMode {
-  background-color: #3dc2ff;
+  --background: #3dc2ff;
+  --color: aliceblue;
 }
 
 ion-grid {

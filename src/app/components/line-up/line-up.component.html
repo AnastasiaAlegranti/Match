@@ -37,7 +37,6 @@
                         <app-select [selectedPlayer]="rows.defendersSecondRow[i]" [isPlayerInReplaceMode]="!(!playerInReplaceMode)"></app-select>
                     </ion-col>
                 </ion-row>
-
                 <ion-row justify-content-center [ngStyle]="{'padding-bottom':this.selectedFormationType.id==1?'33px':'0px'}">
                     <ion-col >
                         <div class="bottom-gate" (click)="switchPlayers(rows.goalKippers,0)" [ngStyle]="{'margin-bottom':this.selectedFormationType.id==1?'-37px':'-3px'}">
@@ -48,17 +47,19 @@
             </div>
         </ion-col>
 
-        <ion-col style="margin-top: 0px;padding-left: 10px; padding-right: 10px;"> <!--Bench-->
+        <ion-col style="margin-top: 0px;padding-left: 10px; padding-right: 10px;">
+            <!--Formation select-->
             <div class="select">
-                <ion-icon name="grid" style="display: inline-block"></ion-icon>
+                <ion-icon name="grid" style="display: inline-block; font-size:50px"></ion-icon>
                 <mat-form-field style="display: block;width: auto;">
-                    <mat-select [(ngModel)]="selectedFormationType" (ngModelChange)="initRows()">
+                    <mat-select [(ngModel)]="selectedFormationType" (ngModelChange)="initRows()" [disabled]=" disableSwitchPlayer$">
                         <mat-option *ngFor="let formation of formationTypesList"[value]="formation.id === selectedFormationType.id ? selectedFormationType : formation">{{formation.name}}</mat-option>
                     </mat-select>
                 </mat-form-field>
             </div>
+            <!--Bench-->
             <div class="bench">
-                <button (click)="enterReplacePlayerMode(player)" *ngFor="let player of benchPlayers$; let i=index" [ngClass]="{'replaceMode': player==playerInReplaceMode}">{{player.lastName}}</button>
+                <ion-button (click)="enterReplacePlayerMode(player)" *ngFor="let player of benchPlayers$; let i=index" [ngClass]="{'replaceMode': player==playerInReplaceMode}">{{player.lastName}}</ion-button>
             </div>
         </ion-col>
     </ion-row>

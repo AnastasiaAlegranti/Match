@@ -5,14 +5,14 @@
         <ion-col>Player In</ion-col>
     </ion-row>
     <ion-row *ngFor="let sub of substitutionsList$, let i=index">
-        <ion-col [ngClass]="{'required': (sub.subMin==='undefined'|| sub.subMin===null) && isSubmitted$}">
+        <ion-col [ngClass]="{'required': ( sub.subMin===null) && isSubmitted$}">
             <input type="number" min="0" max="90" step="1" [(ngModel)]="sub.subMin"(blur)="calculatePlayersLists(i)"/>
         </ion-col>
         <ion-col [ngClass]="{'required': sub.playerOut.id===0  && isSubmitted$}">
-            <app-select-substitution-player [availablePlayers]="sub.lineupPlayers" [selectedPlayer]="sub.playerOut" [isDisable]="!sub.enableSelect" (selectEvent)="initPlayerToSubstitution($event,i,1)"></app-select-substitution-player>
+            <app-select-substitution-player [availablePlayers]="sub.lineupPlayers" [selectedPlayer]="sub.playerOut" [isDisable]="sub.disableSelect" (selectEvent)="initPlayerToSubstitution($event,i,1)"></app-select-substitution-player>
         </ion-col>
         <ion-col [ngClass]="{'required': sub.playerIn.id===0 && isSubmitted$}">
-            <app-select-substitution-player [availablePlayers]="sub.benchPlayers" [selectedPlayer]="sub.playerOut" [isDisable]="!sub.enableSelect"(selectEvent)="initPlayerToSubstitution($event,i,2)"></app-select-substitution-player>
+            <app-select-substitution-player [availablePlayers]="sub.benchPlayers" [selectedPlayer]="sub.playerOut" [isDisable]="sub.disableSelect"(selectEvent)="initPlayerToSubstitution($event,i,2)"></app-select-substitution-player>
         </ion-col>
     </ion-row>
 

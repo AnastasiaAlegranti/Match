@@ -20,6 +20,7 @@ export class LineUpComponent implements OnInit {
     public players$: Player[];
     public benchPlayers$: Player[];
     public lineupPlayers$: Player[];
+    public disableSwitchPlayer$: boolean;
 
     constructor(private matchService: MatchService, private storeService: StoreService) {
         this.subscribePlayers();
@@ -41,20 +42,26 @@ export class LineUpComponent implements OnInit {
         });
         this.storeService.lineupPlayers$.subscribe(lineupPlayers => {
             this.lineupPlayers$ = lineupPlayers;
-            if (lineupPlayers.length === 0) {//Reset lineup on submit
+        });
+        this.storeService.isSubmit$.subscribe(submit => {
+            if (!submit) {//Reset lineup rows after all data submitted
                 this.selectedFormationType = {id: 2, name: '4-3-3'};
                 this.initRows();
             }
         });
+        this.storeService.substitutions$.subscribe(subs => {
+            this.disableSwitchPlayer$ = subs.length === 0 ? false : true;
+        });
     }
 
-     getFormationTypes() {
+    getFormationTypes() {
         this.formationTypesList = this.matchService.getFormationTypes();
     }
 
     initRows() {
         if (this.players$) {// Reset bench players on every formation select
             this.storeService.updateBenchPlayers(this.players$);
+            this.storeService.updateLineupPlayers([]);
         }
         const templeRows = new Rows([], [], [], [], [], [], []);
         switch (this.selectedFormationType.id) {
@@ -97,6 +104,9 @@ export class LineUpComponent implements OnInit {
     }
 
     enterReplacePlayerMode(player) {
+        if (this.disableSwitchPlayer$) {//Don't allow switch players if substitution filled
+            return;
+        }
         if (player) {
             this.playerInReplaceMode = player !== this.playerInReplaceMode ?
                 player : null;

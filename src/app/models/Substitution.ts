@@ -5,7 +5,7 @@ export class Substitution {
         public id?: number,
         public playerIn?: Player,
         public playerOut?: Player,
-        public enableSelect?: boolean,
+        public disableSelect?: boolean,
         public subMin?: number,
         public lineupPlayers?: Player[],
         public benchPlayers?: Player[]

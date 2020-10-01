@@ -8,6 +8,7 @@ import {Substitution} from '../../models/Substitution';
 import {IMatchDataJson} from '../../interfaces/IMatchDataJson';
 import {ISubstitution} from '../../interfaces/ISubstitution';
 import {Score} from '../../models/Score';
+import {Platform} from '@ionic/angular';
 
 @Component({
     selector: 'app-home',
@@ -28,12 +29,12 @@ export class HomeComponent {
     @HostListener('window:resize', ['$event'])//For mobile view style
     onResize(event) {
         this.platformWidth = event.target.innerWidth;
-        if (this.platformWidth <= 550) {
+        if (this.platformWidth <= 550 && !this.platform.is('mobileweb')) {//Change view number only if not runnind on mobile, because keybord open event resizing innerWidth
             this.viewNumber = 1;
         }
     }
 
-    constructor(private store: StoreService, private sharedService: SharedService, private matchService: MatchService) {
+    constructor(private store: StoreService, private sharedService: SharedService, private matchService: MatchService, private platform: Platform) {
         this.subscribeData();
     }
 

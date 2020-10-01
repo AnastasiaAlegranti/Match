@@ -7,7 +7,7 @@ import {Substitution} from '../../models/Substitution';
 @Component({
     selector: 'app-substitutions',
     templateUrl: './substitutions.component.html',
-    styleUrls: ['./substitutions.component.scss']
+    styleUrls: ['./substitutions.component.scss'],
 })
 export class SubstitutionsComponent {
     static count = 0;
@@ -47,9 +47,9 @@ export class SubstitutionsComponent {
             await this.sharedService.showAlert('Must fill players first.', true, false);
             return;
         }
-        this.substitutionsList$.push(new Substitution(SubstitutionsComponent.count++, this.emptyPlayer, this.emptyPlayer, false));
-        if (this.substitutionsList$.length > 0) {//Enable selecting players
-            this.substitutionsList$[this.substitutionsList$.length - 1].enableSelect = false;
+        this.substitutionsList$.push(new Substitution(SubstitutionsComponent.count++, this.emptyPlayer, this.emptyPlayer, true, null));
+        if (this.substitutionsList$.length > 1) {//Disable selecting players in previous substitution
+            this.substitutionsList$[this.substitutionsList$.length - 2].disableSelect = true;
         }
     }
 
@@ -61,7 +61,8 @@ export class SubstitutionsComponent {
         if (index === 0) {//If first substirutution
             this.substitutionsList$[index].benchPlayers = this.benchPlayers$;
             this.substitutionsList$[index].lineupPlayers = this.lineupPlayers$;
-            this.substitutionsList$[index].enableSelect = true;
+            this.substitutionsList$[index].disableSelect = false;
+            this.storeService.updateSubstitutions(this.substitutionsList$);//On first substitution fire event in subscribed and disable select or switch players in lineup.
         } else {
             if (this.substitutionsList$[index - 1].subMin >= this.substitutionsList$[index].subMin) {//Check if current substitution minute is larger than previous
                 await this.sharedService.showAlert('Current substitution minute must be larger than previous.', true, false);
@@ -79,7 +80,7 @@ export class SubstitutionsComponent {
 
             this.substitutionsList$[index].lineupPlayers.push(this.substitutionsList$[index - 1].playerIn);
             this.substitutionsList$[index].lineupPlayers = this.substitutionsList$[index].lineupPlayers.filter(el => el.id !== this.substitutionsList$[index - 1].playerOut.id);
-            this.substitutionsList$[index].enableSelect = true;//Enable select players
+            this.substitutionsList$[index].disableSelect = false;//Enable select players
         }
     }
 
@@ -87,6 +88,5 @@ export class SubstitutionsComponent {
         swInOut === 1 ? this.substitutionsList$[index].playerOut = player : this.substitutionsList$[index].playerIn = player;
         this.storeService.updateSubstitutions(this.substitutionsList$);
     }
-
 
 }

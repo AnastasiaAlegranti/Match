@@ -18,6 +18,7 @@ export class SelectPlayerComponent implements OnInit {
     public benchPlayers$: Player[];
     public lineupPlayers$: Player[];
     public isSubmitted$: boolean;
+    public disableSelect: boolean = false;
 
     public constructor(private sharedService: SharedService, private storeService: StoreService) {
         this.subscribeData();
@@ -38,6 +39,9 @@ export class SelectPlayerComponent implements OnInit {
             this.lineupPlayers$ = selectedPlayers;
         });
         this.storeService.isSubmit$.subscribe(bool => this.isSubmitted$ = bool);
+        this.storeService.substitutions$.subscribe(subs => {
+            this.disableSelect = subs.length === 0 ? false : true;
+        });
     }
 
     async onSelected() {
